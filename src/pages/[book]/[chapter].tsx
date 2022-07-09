@@ -1,0 +1,61 @@
+import { ContentReader } from "@/components";
+import { getContents } from "@/lib";
+import {
+  BookOutlined,
+  FileTextOutlined,
+  HomeOutlined,
+} from "@ant-design/icons";
+import { Breadcrumb } from "antd";
+import type { GetServerSideProps } from "next";
+import Link from "next/link";
+import path from "path";
+import type { FC } from "react";
+
+// __dirname in built file: .next/server/pages/[book]/[chapter].js
+const docPath = path.join(__dirname, "..", "..", "..", "..", "docs");
+
+interface ChapterProps {
+  content: ContentPayload;
+}
+
+const Chapter: FC<ChapterProps> = ({ content }) => {
+  return (
+    <section>
+      <Breadcrumb>
+        <Breadcrumb.Item key="/">
+          <Link href="/">
+            <a>
+              <HomeOutlined />
+            </a>
+          </Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item key={content.bookPath}>
+          <Link href={`/${content.bookPath}`}>
+            <a>
+              <BookOutlined /> {content.bookTitle}
+            </a>
+          </Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item key={content.chapterPath}>
+          <a>
+            <FileTextOutlined /> {content.chapterTitle}
+          </a>
+        </Breadcrumb.Item>
+      </Breadcrumb>
+      <ContentReader content={content} />
+    </section>
+  );
+};
+
+export const getServerSideProps: GetServerSideProps<ChapterProps> = async (
+  context
+) => {
+  const { book, chapter } = context.params || {};
+  const content = await getContents(docPath, book as string, chapter as string);
+
+  return {
+    props: { content },
+  };
+};
+
+export default Chapter;

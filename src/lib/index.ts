@@ -1,42 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
 
-interface Meta {
-  title: string;
-  index?: number;
-  [key: string]: any;
-}
-
-export interface MenuPayload {
-  title: string;
-  pathName: string;
-  index?: number;
-  [key: string]: any;
-  chapters: {
-    title: string;
-    index?: number;
-    [key: string]: any;
-    pathName: string;
-    archives: string[];
-    sections: {
-      pathName: string;
-      index: number;
-      title: string;
-    }[];
-  }[];
-}
-
-export interface ContentPayload {
-  title: any;
-  pathName: string;
-  contents: {
-    content: string;
-    pathName: string;
-    index: number;
-    title: string;
-  }[];
-}
-
 async function readMeta(dirPath: string): Promise<Meta> {
   const metaReader = await fs.readFile(path.join(dirPath, "meta.json"));
   const meta = JSON.parse(metaReader.toString());
@@ -45,11 +9,11 @@ async function readMeta(dirPath: string): Promise<Meta> {
 
 async function getArchives(
   docPath: string,
-  bookName: string,
-  chapterName: string
+  bookPath: string,
+  chapterPath: string
 ) {
   try {
-    const archivePath = path.join(docPath, bookName, chapterName, "archives");
+    const archivePath = path.join(docPath, bookPath, chapterPath, "archives");
     const archives = await fs.readdir(archivePath);
     return archives;
   } catch {
@@ -57,31 +21,31 @@ async function getArchives(
   }
 }
 
-async function getChapters(docPath: string, bookName: string) {
-  const bookPath = path.join(docPath, bookName);
-  const chapters = await fs.readdir(bookPath);
-  const meta = await readMeta(bookPath);
+async function getChapters(docPath: string, bookPath: string) {
+  const bookCompletePath = path.join(docPath, bookPath);
+  const chapters = await fs.readdir(bookCompletePath);
+  const meta = await readMeta(bookCompletePath);
 
   return {
     ...meta,
+    pathName: bookPath,
     chapters: chapters.filter((e) => e !== "meta.json"),
-    pathName: bookName,
   };
 }
 
 async function getSections(
   docPath: string,
-  bookName: string,
-  chapterName: string
+  bookPath: string,
+  chapterPath: string
 ) {
-  const chapterPath = path.join(docPath, bookName, chapterName);
-  const sections = await fs.readdir(chapterPath);
-  const meta = await readMeta(chapterPath);
+  const chapterCompletePath = path.join(docPath, bookPath, chapterPath);
+  const sections = await fs.readdir(chapterCompletePath);
+  const meta = await readMeta(chapterCompletePath);
 
   return {
     ...meta,
-    pathName: chapterName,
-    archives: await getArchives(docPath, bookName, chapterName),
+    pathName: chapterPath,
+    archives: await getArchives(docPath, bookPath, chapterPath),
     sections: sections
       .filter((e) => e.match(/\.md$/))
       .map(getSectionTitle)
@@ -89,11 +53,11 @@ async function getSections(
   };
 }
 
-function getSectionTitle(sectionName: string) {
+function getSectionTitle(sectionPath: string) {
   return {
-    pathName: sectionName,
-    index: parseFloat(sectionName),
-    title: sectionName.replace(/\.md$/, "").replace(/^([0-9]+\.)+/, ""),
+    pathName: sectionPath,
+    index: parseFloat(sectionPath),
+    title: sectionPath.replace(/\.md$/, "").replace(/^([0-9]+\.)+/, ""),
   };
 }
 
@@ -103,8 +67,7 @@ export async function getMenu(docPath: string): Promise<MenuPayload[]> {
   const menu = [];
   for (const chapter of chapters) {
     menu.push({
-      title: chapter.title,
-      pathName: chapter.pathName,
+      ...chapter,
       chapters: await Promise.all(
         chapter.chapters.map((e) => getSections(docPath, chapter.pathName, e))
       ),
@@ -116,29 +79,30 @@ export async function getMenu(docPath: string): Promise<MenuPayload[]> {
 
 async function readContent(
   docPath: string,
-  bookName: string,
-  chapterName: string,
+  bookPath: string,
+  chapterPath: string,
   sectionPath: string
 ) {
-  const sectionPathname = path.join(
+  const sectionCompletePath = path.join(
     docPath,
-    bookName,
-    chapterName,
+    bookPath,
+    chapterPath,
     sectionPath
   );
-  const reader = await fs.readFile(sectionPathname);
+  const reader = await fs.readFile(sectionCompletePath);
   return reader.toString();
 }
 
 export async function getContents(
   docPath: string,
-  bookName: string,
-  chapterName: string
+  bookPath: string,
+  chapterPath: string
 ): Promise<ContentPayload> {
-  const sections = await getSections(docPath, bookName, chapterName);
+  const chapters = await getChapters(docPath, bookPath);
+  const sections = await getSections(docPath, bookPath, chapterPath);
   const readers = await Promise.all(
     sections.sections.map((e) =>
-      readContent(docPath, bookName, chapterName, e.pathName)
+      readContent(docPath, bookPath, chapterPath, e.pathName)
     )
   );
   const contents = sections.sections.map((e, i) => ({
@@ -146,8 +110,10 @@ export async function getContents(
     content: readers[i].toString(),
   }));
   return {
-    title: sections.title,
-    pathName: sections.pathName,
+    bookPath: bookPath,
+    bookTitle: chapters.title,
+    chapterTitle: sections.title,
+    chapterPath: sections.pathName,
     contents,
   };
 }

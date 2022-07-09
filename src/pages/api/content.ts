@@ -1,5 +1,4 @@
 import path from "path";
-import type { ContentPayload } from "@/lib";
 import { getContents } from "@/lib";
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -12,8 +11,12 @@ export default async function handler(
 ) {
   const { book, chapter } = req.query;
   try {
-    const menu = await getContents(docPath, book as string, chapter as string);
-    res.status(200).json(menu);
+    const content = await getContents(
+      docPath,
+      book as string,
+      chapter as string
+    );
+    res.status(200).json(content);
   } catch (error) {
     res.status(400).send(error as Error);
   }

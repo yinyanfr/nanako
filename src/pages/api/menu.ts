@@ -1,5 +1,4 @@
 import path from "path";
-import type { MenuPayload } from "@/lib";
 import { getMenu } from "@/lib";
 import type { NextApiRequest, NextApiResponse } from "next";
 
