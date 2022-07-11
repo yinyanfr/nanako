@@ -1,5 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
+import { Converter } from "opencc-js";
 
 async function readMeta(dirPath: string): Promise<Meta> {
   const metaReader = await fs.readFile(path.join(dirPath, "meta.json"));
@@ -115,5 +116,37 @@ export async function getContents(
     chapterTitle: sections.title,
     chapterPath: sections.pathName,
     contents,
+  };
+}
+
+export function convertMenuCC(menu: MenuPayload): MenuPayload {
+  const convert = Converter({ from: "cn", to: "twp" });
+
+  return {
+    ...menu,
+    title: convert(menu.title),
+    chapters: menu.chapters.map((e) => ({
+      ...e,
+      title: convert(e.title),
+      sections: e.sections.map((e) => ({
+        ...e,
+        title: convert(e.title),
+      })),
+    })),
+  };
+}
+
+export function convertContentCC(content: ContentPayload): ContentPayload {
+  const convert = Converter({ from: "cn", to: "twp" });
+
+  return {
+    ...content,
+    bookTitle: convert(content.bookTitle),
+    chapterTitle: convert(content.chapterTitle),
+    contents: content.contents.map((e) => ({
+      ...e,
+      title: convert(e.title),
+      content: convert(e.content),
+    })),
   };
 }

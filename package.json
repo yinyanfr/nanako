@@ -3,15 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node server.js",
     "build": "next build",
-    "start": "next start",
+    "start": "cross-env NODE_ENV=production node server.js",
     "lint": "next lint"
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
+    "ahooks": "^3.5.2",
     "antd": "^4.21.5",
+    "cross-env": "^7.0.3",
+    "express": "^4.18.1",
     "next": "12.2.1",
+    "next-dark-mode": "^3.0.0",
+    "nookies": "^2.5.2",
+    "opencc-js": "^1.0.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-markdown": "^8.0.3",
@@ -19,6 +25,7 @@
   },
   "devDependencies": {
     "@types/node": "18.0.3",
+    "@types/opencc-js": "^1.0.0",
     "@types/react": "18.0.15",
     "@types/react-dom": "18.0.6",
     "eslint": "8.19.0",
