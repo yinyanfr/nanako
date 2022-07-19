@@ -1,3 +1,5 @@
+declare module "*.css";
+
 interface Meta {
   title: string;
   index?: number;

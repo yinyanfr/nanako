@@ -1,4 +1,4 @@
-import ReaderContext from "@/lib/ReaderContext";
+import { ReaderContext } from "@/lib/client";
 import {
   BulbOutlined,
   CheckOutlined,
@@ -118,7 +118,6 @@ const ContentNav: FC<ContentNavProps> = ({ content }) => {
     <Menu
       mode="inline"
       items={menuItems}
-      defaultOpenKeys={["summary"]}
       defaultSelectedKeys={[
         `${id}-1`,
         router.locale === "zh-Hant" ? "zh-Hant" : "zh-Hans",

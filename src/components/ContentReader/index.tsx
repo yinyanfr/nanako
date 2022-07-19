@@ -1,4 +1,4 @@
-import ReaderContext from "@/lib/ReaderContext";
+import { ReaderContext } from "@/lib/client";
 import { BackTop, Divider } from "antd";
 import { useRouter } from "next/router";
 import path from "path";
@@ -6,6 +6,7 @@ import { FC, useContext } from "react";
 import { useId } from "react";
 import ReactMarkdown from "react-markdown";
 import ContentNav from "./ContentNav";
+import styles from "./index.module.css";
 
 interface ContentReaderProps {
   content: ContentPayload;
@@ -17,20 +18,20 @@ const ContentReader: FC<ContentReaderProps> = ({ content }) => {
   const { fontSize } = useContext(ReaderContext);
 
   return (
-    <div>
-      <div className="float-right">
+    <section className={styles["reader-wrapper"]}>
+      <nav className={styles["reader-nav"]}>
         <ContentNav content={content} />
-      </div>
-      <div style={{ fontSize }}>
+      </nav>
+      <div className={styles["reader"]} style={{ fontSize }}>
         {content?.contents.map((e) => (
           <article key={`${id}-${e.index}`} id={`${e.index}`}>
             <ReactMarkdown
               className="markdown"
               transformImageUri={(uri) => {
                 const { book, chapter } = router.query;
-                const image = path.basename(uri);
+                const image = path.basename(uri); // really ?
 
-                return `../../api/image?book=${book}&chapter=${chapter}&image=${image}`;
+                return `/api/image?book=${book}&chapter=${chapter}&image=${image}`;
               }}
             >
               {e.content}
@@ -40,7 +41,7 @@ const ContentReader: FC<ContentReaderProps> = ({ content }) => {
         ))}
       </div>
       <BackTop />
-    </div>
+    </section>
   );
 };
 

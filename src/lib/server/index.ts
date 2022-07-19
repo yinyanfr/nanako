@@ -62,19 +62,23 @@ function getSectionTitle(sectionPath: string) {
   };
 }
 
+export async function getBook(
+  docPath: string,
+  bookPath: string
+): Promise<MenuPayload> {
+  const book = await getChapters(docPath, bookPath);
+  const chapters = await Promise.all(
+    book.chapters.map((e) => getSections(docPath, book.pathName, e))
+  );
+  return {
+    ...book,
+    chapters,
+  };
+}
+
 export async function getMenu(docPath: string): Promise<MenuPayload[]> {
   const books = await fs.readdir(docPath);
-  const chapters = await Promise.all(books.map((e) => getChapters(docPath, e)));
-  const menu = [];
-  for (const chapter of chapters) {
-    menu.push({
-      ...chapter,
-      chapters: await Promise.all(
-        chapter.chapters.map((e) => getSections(docPath, chapter.pathName, e))
-      ),
-    });
-  }
-
+  const menu = await Promise.all(books.map((e) => getBook(docPath, e)));
   return menu;
 }
 

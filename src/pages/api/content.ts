@@ -1,5 +1,5 @@
 import path from "path";
-import { getContents } from "@/lib";
+import { getContents } from "@/lib/server";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 // __dirname in built file: .next/server/pages/api/menu.js

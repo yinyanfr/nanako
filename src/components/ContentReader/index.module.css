@@ -1,0 +1,25 @@
+.reader-wrapper {
+  margin: 2rem auto;
+  width: 1000px;
+  max-width: 90vw;
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 20px;
+}
+
+.reader-nav {
+  align-self: flex-start;
+  position: sticky;
+  top: 20px;
+}
+
+@media only screen and (max-width: 992px) {
+  .reader-wrapper {
+    flex-direction: column;
+  }
+
+  .reader-nav {
+    align-self: stretch;
+    position: static;
+  }
+}

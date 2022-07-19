@@ -4,7 +4,11 @@ import type { AppProps } from "next/app";
 import withDarkMode from "next-dark-mode";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+  return (
+    <div className="container">
+      <Component {...pageProps} />
+    </div>
+  );
 }
 
 export default withDarkMode(MyApp);

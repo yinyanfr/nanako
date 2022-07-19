@@ -16,6 +16,10 @@ a {
   box-sizing: border-box;
 }
 
+.container {
+  padding: 2rem;
+}
+
 .markdown>*>img {
   max-width: 75vw;
   margin-left: auto;
@@ -24,6 +28,8 @@ a {
   /* float: right; */
 }
 
-.float-right {
-  float: right;
+@media only screen and (max-width: 992px) {
+  .container {
+    padding: 1rem;
+  }
 }
