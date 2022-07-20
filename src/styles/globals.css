@@ -24,6 +24,11 @@ main {
   padding: 2rem;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
 .markdown>*>img {
   max-width: 75vw;
   margin-left: auto;

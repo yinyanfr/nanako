@@ -48,7 +48,8 @@ docs
 {
   "title": "立夏",
   "lang": "zh-Hans",
-  "index": 1
+  "index": 1,
+  "category": "novel"
 }
 ```
 
@@ -59,3 +60,35 @@ docs
 ```
 
 Will automatically redirect to `/images/nanzhi1.jpg`
+
+### Modify `src/nanako.json`
+
+```json
+{
+  "port": 20200,
+  "footer": "对于本网站及展示的作品，作者保留一切权力。",
+  "title": "小喵新姬的博客",
+  "headTitle": "咕噜咕噜喵儿",
+  "cookieConsent": true,
+  "categories": {
+    "novel": "小说",
+    "casual": "随笔",
+    "tutorial": "教程",
+    "uncategorized": "未分类"
+  }
+}
+```
+
+### Deploy
+
+```bash
+yarn build
+
+yarn start
+
+# or
+
+NODE_ENV=production node server.js
+```
+
+Ask Next.js for anything that goes wrong with deployment.

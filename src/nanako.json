@@ -1,0 +1,13 @@
+{
+  "port": 20200,
+  "footer": "对于本网站及展示的作品，作者保留一切权力。",
+  "title": "小喵新姬的博客",
+  "headTitle": "咕噜咕噜喵儿",
+  "cookieConsent": true,
+  "categories": {
+    "novel": "小说",
+    "casual": "随笔",
+    "tutorial": "教程",
+    "uncategorized": "未分类"
+  }
+}

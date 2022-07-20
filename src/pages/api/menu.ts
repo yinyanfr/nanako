@@ -7,7 +7,7 @@ const docPath = path.join(__dirname, "..", "..", "..", "..", "docs");
 
 export default async function handler(
   _: NextApiRequest,
-  res: NextApiResponse<MenuPayload[] | Error>
+  res: NextApiResponse<Record<string, MenuPayload[]> | Error>
 ) {
   try {
     const menu = await getMenu(docPath);

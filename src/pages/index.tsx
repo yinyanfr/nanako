@@ -7,9 +7,10 @@ import { Fragment, useId } from "react";
 import styles from "../styles/Home.module.css";
 import { getMenu } from "@/lib/server";
 import path from "path";
-import nookies from "nookies";
-import Link from "next/link";
+import nookies, { setCookie } from "nookies";
 import { useRouter } from "next/router";
+import { DynamicDarkReader } from "@/components";
+import config from "@/nanako.json";
 
 interface HomeProps {
   menu: Record<string, MenuPayload[]>;
@@ -19,35 +20,39 @@ interface HomeProps {
 // __dirname in built file: .next/server/pages/index.js
 const docPath = path.join(__dirname, "..", "..", "..", "docs");
 
-const translations: Record<string, string> = {
-  novel: "小说",
-  casual: "随笔",
-  tutorial: "教程",
-  uncategorized: "未分类",
-};
+const translations: Record<string, string> = config.categories;
 
-const Home: FC<HomeProps> = ({ menu }) => {
+const Home: FC<HomeProps> = ({ menu, cookies }) => {
   const id = useId();
   const router = useRouter();
 
   return (
     <main>
       <Head>
-        <title>咕噜咕噜喵儿</title>
+        <title>{config.headTitle}</title>
         <meta key="description" name="description" content="类似于博客的东西" />
         <meta key="title" property="og:title" content="咕噜咕噜喵儿" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Breadcrumb>
-        <Breadcrumb.Item key="/">
-          <HomeOutlined />
-        </Breadcrumb.Item>
-      </Breadcrumb>
+      <header className="header">
+        <Breadcrumb>
+          <Breadcrumb.Item key="/">
+            <HomeOutlined />
+          </Breadcrumb.Item>
+        </Breadcrumb>
+
+        <DynamicDarkReader
+          defaultDarken={cookies.theme === "dark"}
+          onChange={(isDark) => {
+            setCookie(null, "theme", isDark ? "dark" : "light", { path: "/" });
+          }}
+        />
+      </header>
 
       <div className="container">
-        <h1>小更新姬的博客</h1>
+        <h1>{config.title}</h1>
 
-        {["novel", "casual", "tutorial", "uncategorized"].map((e) => (
+        {Object.keys(config.categories).map((e) => (
           <Fragment key={e}>
             <h2>{translations[e]}</h2>
             <Card>

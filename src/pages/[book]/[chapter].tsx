@@ -1,4 +1,4 @@
-import { ContentReader } from "@/components";
+import { ContentReader, DynamicDarkReader } from "@/components";
 import {
   convertContentCC,
   convertMenuCC,
@@ -16,7 +16,7 @@ import Link from "next/link";
 import path from "path";
 import type { FC } from "react";
 import { useState } from "react";
-import nookies from "nookies";
+import nookies, { setCookie } from "nookies";
 import { ReaderContext } from "@/lib/client";
 import Head from "next/head";
 
@@ -30,7 +30,7 @@ interface ChapterProps {
 }
 
 const Chapter: FC<ChapterProps> = ({ content, book, cookies }) => {
-  const [fontSize, setFontSize] = useState(parseInt(cookies.fontSize) || 14);
+  const [fontSize, setFontSize] = useState(parseInt(cookies.fontSize) || 16);
   const { chapters } = book;
 
   return (
@@ -45,27 +45,37 @@ const Chapter: FC<ChapterProps> = ({ content, book, cookies }) => {
           content={`${content.bookTitle} - ${content.chapterTitle}`}
         />
       </Head>
-      <Breadcrumb>
-        <Breadcrumb.Item key="/">
-          <Link href="/">
+
+      <header className="header">
+        <Breadcrumb>
+          <Breadcrumb.Item key="/">
+            <Link href="/">
+              <a>
+                <HomeOutlined />
+              </a>
+            </Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item key={content.bookPath}>
+            <Link href={`/${content.bookPath}`}>
+              <a>
+                <BookOutlined /> {content.bookTitle}
+              </a>
+            </Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item key={content.chapterPath}>
             <a>
-              <HomeOutlined />
+              <FileTextOutlined /> {content.chapterTitle}
             </a>
-          </Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item key={content.bookPath}>
-          <Link href={`/${content.bookPath}`}>
-            <a>
-              <BookOutlined /> {content.bookTitle}
-            </a>
-          </Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item key={content.chapterPath}>
-          <a>
-            <FileTextOutlined /> {content.chapterTitle}
-          </a>
-        </Breadcrumb.Item>
-      </Breadcrumb>
+          </Breadcrumb.Item>
+        </Breadcrumb>
+
+        <DynamicDarkReader
+          defaultDarken={cookies.theme === "dark"}
+          onChange={(isDark) => {
+            setCookie(null, "theme", isDark ? "dark" : "light", { path: "/" });
+          }}
+        />
+      </header>
 
       <ReaderContext.Provider value={{ fontSize, setFontSize }}>
         <ContentReader content={content} chapters={chapters} />

@@ -20,3 +20,8 @@ export const DynamicDetectScroll: ComponentType<PropsWithChildren> = dynamic(
     loading: () => <Spin />,
   }
 );
+
+export const DynamicDarkReader = dynamic(() => import("react-darkreader"), {
+  ssr: false,
+  loading: () => <Spin />,
+});

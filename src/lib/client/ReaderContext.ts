@@ -6,7 +6,7 @@ interface IReaderContext {
 }
 
 const ReaderContext = createContext<IReaderContext>({
-  fontSize: 14,
+  fontSize: 16,
   setFontSize() {},
 });
 

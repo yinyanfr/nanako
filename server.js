@@ -1,7 +1,8 @@
 const express = require('express')
 const next = require('next')
+const config = require("./src/nanako.json")
 
-const port = 20228
+const port = config.port || 20200
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()

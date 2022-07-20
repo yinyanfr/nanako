@@ -1,7 +1,5 @@
 import { ReaderContext } from "@/lib/client";
 import {
-  BulbOutlined,
-  CheckOutlined,
   FileTextOutlined,
   FontColorsOutlined,
   FontSizeOutlined,
@@ -9,7 +7,6 @@ import {
   TranslationOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
-import { useDarkMode } from "next-dark-mode";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import type { Dispatch, FC, SetStateAction } from "react";
@@ -32,7 +29,6 @@ const ContentNav: FC<ContentNavProps> = ({
 }) => {
   const id = useId();
   const router = useRouter();
-  const { darkModeActive, switchToLightMode, switchToDarkMode } = useDarkMode();
   const { fontSize, setFontSize } = useContext(ReaderContext);
   const responsive = useResponsive();
 
@@ -67,8 +63,7 @@ const ContentNav: FC<ContentNavProps> = ({
       label: (
         <Link href={`/${router.query.book}/${e.pathName}`}>
           <a>
-            {e.index}. {e.title}{" "}
-            {router.query.chapter === e.pathName && <CheckOutlined />}
+            {e.index}. {e.title}
           </a>
         </Link>
       ),
@@ -97,7 +92,7 @@ const ContentNav: FC<ContentNavProps> = ({
           key: "zh-Hans",
           label: (
             <Link href={router.asPath} locale="zh-Hans">
-              <a>中文简体 {router.locale !== "zh-Hant" && <CheckOutlined />}</a>
+              <a>中文简体</a>
             </Link>
           ),
         },
@@ -105,7 +100,7 @@ const ContentNav: FC<ContentNavProps> = ({
           key: "zh-Hant",
           label: (
             <Link href={router.asPath} locale="zh-Hant">
-              <a>中文繁体 {router.locale === "zh-Hant" && <CheckOutlined />}</a>
+              <a>中文繁体</a>
             </Link>
           ),
         },
@@ -117,35 +112,11 @@ const ContentNav: FC<ContentNavProps> = ({
       icon: <FontColorsOutlined />,
       children: [
         {
-          key: "dark",
-          label: "模式",
-          icon: <BulbOutlined />,
-          type: "group",
-          children: [
-            {
-              key: "light",
-              label: (
-                <a onClick={switchToLightMode}>
-                  亮色 {!darkModeActive && <CheckOutlined />}
-                </a>
-              ),
-            },
-            {
-              key: "dark",
-              label: (
-                <a onClick={switchToDarkMode}>
-                  暗色 {darkModeActive && <CheckOutlined />}
-                </a>
-              ),
-            },
-          ],
-        },
-        {
           key: "fontSize",
           label: "字号",
           icon: <FontSizeOutlined />,
           type: "group",
-          children: [12, 14, 16, 18, 20].map((e) => ({
+          children: [14, 16, 18, 20, 22].map((e) => ({
             key: `font-${e}`,
             label: (
               <a
@@ -154,7 +125,7 @@ const ContentNav: FC<ContentNavProps> = ({
                   setCookie(null, "fontSize", `${e}`, { path: "/" });
                 }}
               >
-                {e} {fontSize === e && <CheckOutlined />}
+                {e}
               </a>
             ),
           })),
@@ -171,7 +142,6 @@ const ContentNav: FC<ContentNavProps> = ({
         `${id}-${scrollIndex + 1}`,
         router.query.chapter as string,
         router.locale === "zh-Hant" ? "zh-Hant" : "zh-Hans",
-        darkModeActive ? "dark" : "light",
         `font-${fontSize}`,
       ]}
       openKeys={openedKeys}

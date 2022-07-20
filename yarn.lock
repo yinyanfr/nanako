@@ -36,11 +36,6 @@
     lodash "^4.17.21"
     resize-observer-polyfill "^1.5.1"
 
-"@assortment/darkmodejs@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@assortment/darkmodejs/-/darkmodejs-1.2.1.tgz#b021f6d2c5b19d22115bbbc81711adb52322e066"
-  integrity sha512-kP8ZJKG4BluaYSAwsM3u6s4Zoa2NjUaQbKDBefhpYTyWuGxc+OeNvndsVZz4CIvCcUAMXbu9FX9HeKptfoMkOg==
-
 "@babel/runtime-corejs3@^7.10.2":
   version "7.18.6"
   resolved "https://registry.yarnpkg.com/@babel/runtime-corejs3/-/runtime-corejs3-7.18.6.tgz#6f02c5536911f4b445946a2179554b95c8838635"
@@ -694,6 +689,11 @@ damerau-levenshtein@^1.0.8:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/damerau-levenshtein/-/damerau-levenshtein-1.0.8.tgz#b43d286ccbd36bc5b2f7ed41caf2d0aba1f8a6e7"
   integrity sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==
+
+darkreader@^4.9.26:
+  version "4.9.52"
+  resolved "https://registry.yarnpkg.com/darkreader/-/darkreader-4.9.52.tgz#707b57e540c6a324fe4b04bfcf4d9396c6e9a088"
+  integrity sha512-srWkYziXiEjWZFkC8opYJe/KS95PwPAJlyHKSngKgQ8OkZdNL8Hz3pT3udbz+TUWCmv6vs7DZfUui6TwN/sGRQ==
 
 date-fns@2.x:
   version "2.28.0"
@@ -1535,7 +1535,7 @@ isexe@^2.0.0:
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==
 
-js-cookie@^2.x.x:
+js-cookie@^2.2.1, js-cookie@^2.x.x:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/js-cookie/-/js-cookie-2.2.1.tgz#69e106dc5d5806894562902aa5baec3744e9b2b8"
   integrity sha512-HvdH2LzI/EAZcUwA8+0nKNtWHqS+ZmijLA30RwZA0bo7ToCckjK5MkGhjED9KoRcXO6BaGI3I9UIzSA1FKFPOQ==
@@ -1992,14 +1992,6 @@ negotiator@0.6.3:
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.3.tgz#58e323a72fedc0d6f9cd4d31fe49f51479590ccd"
   integrity sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==
 
-next-dark-mode@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/next-dark-mode/-/next-dark-mode-3.0.0.tgz#99196f799bbb03f35e0ca9688272626e2c4bd790"
-  integrity sha512-DNiKexCzNmzPuUZ9Udumo1ZOcZ7grxg1PGm72vBmjfwSW6P4Jm2WjUqaM74jb37NRflU3PjJxhmXTuaa4dFiTQ==
-  dependencies:
-    "@assortment/darkmodejs" "^1.2.1"
-    nookies "^2.5.2"
-
 next@12.2.1:
   version "12.2.1"
   resolved "https://registry.yarnpkg.com/next/-/next-12.2.1.tgz#b487dc598ef1373a1b1275d68531a7088fe5653d"
@@ -2217,7 +2209,7 @@ prelude-ls@^1.2.1:
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"
   integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
 
-prop-types@^15.0.0, prop-types@^15.8.1:
+prop-types@^15.0.0, prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -2638,6 +2630,22 @@ rc-virtual-list@^3.2.0, rc-virtual-list@^3.4.8:
     rc-resize-observer "^1.0.0"
     rc-util "^5.15.0"
 
+react-cookie-consent@^7.5.0:
+  version "7.5.0"
+  resolved "https://registry.yarnpkg.com/react-cookie-consent/-/react-cookie-consent-7.5.0.tgz#289e391f134f42fc02c16e83f67ae4790e1e08a3"
+  integrity sha512-RHqstWmR9G1hImACtaWyiFbR0UxN6caX3AJmDyplQCNypQxnutyD1hJNhhTd6djU7oesRifUoXmnRYHsJxfANA==
+  dependencies:
+    js-cookie "^2.2.1"
+    prop-types "^15.7.2"
+
+react-darkreader@^1.5.6:
+  version "1.5.6"
+  resolved "https://registry.yarnpkg.com/react-darkreader/-/react-darkreader-1.5.6.tgz#5953bdd8f95f0a6e45f5f8cbcab7c39c084a3fc8"
+  integrity sha512-z7ld0Jn2wC5B5Eqo+L8PYNWcHpKdLKIOKICbNkvldfC5bQBRqb2RFBYEbz6CfYxcgpXZUq3rJF2tq4wIWUaF0Q==
+  dependencies:
+    darkreader "^4.9.26"
+    react-switch "^6.0.0"
+
 react-dom@18.2.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.2.0.tgz#22aaf38708db2674ed9ada224ca4aa708d821e3d"
@@ -2681,6 +2689,13 @@ react-scroll-detect@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/react-scroll-detect/-/react-scroll-detect-1.2.0.tgz#a988bd67e594687f077ca6bcae76af0f0e44b7d8"
   integrity sha512-NUUFqjMkRcyy8BjXs8BuTNyMLTe9EfjcIRafC2oALpXw0OLviZIe0d53Mio1LLxz+hK+TpvI61pwB2V+TTSuGw==
+
+react-switch@^6.0.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/react-switch/-/react-switch-6.1.0.tgz#46239535820f6cf1331aecd948ba585d8a7b532a"
+  integrity sha512-cOwQkxtHCOGtoK0KN3kZBPTQjt8P1TTpaor+TS0AJRLfFBIRkgjVIUCwAfvVlW32Bi1BK333rk9y/14suD38SA==
+  dependencies:
+    prop-types "^15.7.2"
 
 react@18.2.0:
   version "18.2.0"

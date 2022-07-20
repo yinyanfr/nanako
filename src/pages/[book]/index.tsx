@@ -10,8 +10,9 @@ import type { FC } from "react";
 import { useId } from "react";
 import { convertMenuCC, getBook } from "@/lib/server";
 import path from "path";
-import nookies from "nookies";
+import nookies, { setCookie } from "nookies";
 import Head from "next/head";
+import { DynamicDarkReader } from "@/components";
 
 interface BookProps {
   book: MenuPayload;
@@ -21,7 +22,7 @@ interface BookProps {
 // __dirname in built file: .next/server/pages/[book].js
 const docPath = path.join(__dirname, "..", "..", "..", "docs");
 
-const Book: FC<BookProps> = ({ book }) => {
+const Book: FC<BookProps> = ({ book, cookies }) => {
   const id = useId();
 
   return (
@@ -30,20 +31,29 @@ const Book: FC<BookProps> = ({ book }) => {
         <title>{book.title}</title>
         <meta key="title" property="og:title" content={book.title} />
       </Head>
-      <Breadcrumb>
-        <Breadcrumb.Item key="/">
-          <Link href="/">
+      <header className="header">
+        <Breadcrumb>
+          <Breadcrumb.Item key="/">
+            <Link href="/">
+              <a>
+                <HomeOutlined />
+              </a>
+            </Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item key={book.pathName}>
             <a>
-              <HomeOutlined />
+              <BookOutlined /> {book.title}
             </a>
-          </Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item key={book.pathName}>
-          <a>
-            <BookOutlined /> {book.title}
-          </a>
-        </Breadcrumb.Item>
-      </Breadcrumb>
+          </Breadcrumb.Item>
+        </Breadcrumb>
+
+        <DynamicDarkReader
+          defaultDarken={cookies.theme === "dark"}
+          onChange={(isDark) => {
+            setCookie(null, "theme", isDark ? "dark" : "light", { path: "/" });
+          }}
+        />
+      </header>
 
       <div className="container">
         <h1>{book.title}</h1>
@@ -89,7 +99,9 @@ const Book: FC<BookProps> = ({ book }) => {
               <List
                 dataSource={e.archives}
                 renderItem={(item) => (
-                  <a>
+                  <a
+                    href={`/api/archive?book=${book.pathName}&chapter=${e.pathName}&archive=${item}`}
+                  >
                     <List.Item>
                       <DownloadOutlined /> {item}
                     </List.Item>
