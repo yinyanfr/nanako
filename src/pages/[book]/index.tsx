@@ -23,7 +23,6 @@ const docPath = path.join(__dirname, "..", "..", "..", "docs");
 
 const Book: FC<BookProps> = ({ book }) => {
   const id = useId();
-  console.log(book);
 
   return (
     <main>

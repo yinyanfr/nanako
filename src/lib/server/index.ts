@@ -90,18 +90,42 @@ export async function getBook(
   return payload;
 }
 
-export async function getMenu(docPath: string): Promise<MenuPayload[]> {
+function groupMenuByCategory(
+  menu: MenuPayload[]
+): Record<string, MenuPayload[]> {
+  const grouped: Record<string, MenuPayload[]> = {};
+  const uncategorized: MenuPayload[] = [];
+  menu.forEach((e) => {
+    if (e.category) {
+      if (grouped[e.category]) {
+        grouped[e.category].push(e);
+      } else {
+        grouped[e.category] = [e];
+      }
+    } else {
+      uncategorized.push(e);
+    }
+  });
+
+  return { ...grouped, uncategorized };
+}
+
+export async function getMenu(
+  docPath: string
+): Promise<Record<string, MenuPayload[]>> {
   const cacheKey = "menu";
-  const cached = cache.get<MenuPayload[]>(cacheKey);
+  const cached = cache.get<Record<string, MenuPayload[]>>(cacheKey);
   if (cached) {
     return cached;
   }
 
   const books = await fs.readdir(docPath);
   const menu = await Promise.all(books.map((e) => getBook(docPath, e)));
-  cache.set(cacheKey, menu, LONG_TTL);
+  menu.sort((a, b) => (a?.index || 0) - (b?.index || 0));
+  const grouped = groupMenuByCategory(menu);
+  cache.set(cacheKey, grouped, LONG_TTL);
 
-  return menu;
+  return grouped;
 }
 
 async function readContent(

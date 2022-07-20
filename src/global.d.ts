@@ -10,6 +10,7 @@ interface MenuPayload {
   title: string;
   pathName: string;
   index?: number;
+  category?: string;
   [key: string]: any;
   chapters: {
     title: string;
