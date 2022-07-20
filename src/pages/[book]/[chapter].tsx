@@ -18,6 +18,7 @@ import type { FC } from "react";
 import { useState } from "react";
 import nookies from "nookies";
 import { ReaderContext } from "@/lib/client";
+import Head from "next/head";
 
 // __dirname in built file: .next/server/pages/[book]/[chapter].js
 const docPath = path.join(__dirname, "..", "..", "..", "..", "docs");
@@ -34,6 +35,16 @@ const Chapter: FC<ChapterProps> = ({ content, book, cookies }) => {
 
   return (
     <main>
+      <Head>
+        <title>
+          {content.bookTitle} - {content.chapterTitle}
+        </title>
+        <meta
+          key="title"
+          property="og:title"
+          content={`${content.bookTitle} - ${content.chapterTitle}`}
+        />
+      </Head>
       <Breadcrumb>
         <Breadcrumb.Item key="/">
           <Link href="/">

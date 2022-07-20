@@ -2,7 +2,9 @@ import dynamic from "next/dynamic";
 import { Spin } from "antd";
 import type { ComponentType, PropsWithChildren } from "react";
 import { ReactScrollDetectProps } from "react-scroll-detect";
+
 export { default as ContentReader } from "./ContentReader";
+export { default as Footer } from "./Footer";
 
 export const DynamicReactScrollDetect: ComponentType<
   PropsWithChildren<ReactScrollDetectProps>

@@ -62,9 +62,7 @@ const ContentNav: FC<ContentNavProps> = ({
   }, [content, id]);
 
   const chapterItems = useMemo(() => {
-    const sorted = [...chapters];
-    sorted.sort((a, b) => (a?.index || 0) - (b?.index || 0));
-    return sorted.map((e) => ({
+    return chapters.map((e) => ({
       key: e.pathName,
       label: (
         <Link href={`/${router.query.book}/${e.pathName}`}>

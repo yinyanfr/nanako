@@ -1,11 +1,17 @@
-import { BookOutlined, HomeOutlined } from "@ant-design/icons";
-import { Breadcrumb } from "antd";
+import {
+  BookOutlined,
+  DownloadOutlined,
+  HomeOutlined,
+} from "@ant-design/icons";
+import { Breadcrumb, Collapse, Divider, List } from "antd";
 import type { GetServerSideProps } from "next/types";
 import Link from "next/link";
 import type { FC } from "react";
+import { useId } from "react";
 import { convertMenuCC, getBook } from "@/lib/server";
 import path from "path";
 import nookies from "nookies";
+import Head from "next/head";
 
 interface BookProps {
   book: MenuPayload;
@@ -16,8 +22,15 @@ interface BookProps {
 const docPath = path.join(__dirname, "..", "..", "..", "docs");
 
 const Book: FC<BookProps> = ({ book }) => {
+  const id = useId();
+  console.log(book);
+
   return (
     <main>
+      <Head>
+        <title>{book.title}</title>
+        <meta key="title" property="og:title" content={book.title} />
+      </Head>
       <Breadcrumb>
         <Breadcrumb.Item key="/">
           <Link href="/">
@@ -32,6 +45,62 @@ const Book: FC<BookProps> = ({ book }) => {
           </a>
         </Breadcrumb.Item>
       </Breadcrumb>
+
+      <div className="container">
+        <h1>{book.title}</h1>
+
+        <h2>目录</h2>
+        <Collapse bordered={false}>
+          {book.chapters.map((e) => (
+            <Collapse.Panel
+              key={`${id}-chapters-${e.pathName}`}
+              header={e.title}
+            >
+              <List
+                dataSource={e.sections}
+                renderItem={(item) => (
+                  <Link
+                    key={`${id}-${item.index}`}
+                    href={`/${book.pathName}/${e.pathName}#${item.index}`}
+                  >
+                    <a>
+                      <List.Item>{item.title}</List.Item>
+                    </a>
+                  </Link>
+                )}
+              />
+            </Collapse.Panel>
+          ))}
+        </Collapse>
+
+        <Divider />
+
+        <h2>下载</h2>
+        <Collapse
+          bordered={false}
+          defaultActiveKey={book.chapters
+            .filter((e) => e.archives?.length)
+            .map((e) => `${id}-archives-${e.pathName}`)}
+        >
+          {book.chapters.map((e) => (
+            <Collapse.Panel
+              key={`${id}-archives-${e.pathName}`}
+              header={e.title}
+            >
+              <List
+                dataSource={e.archives}
+                renderItem={(item) => (
+                  <a>
+                    <List.Item>
+                      <DownloadOutlined /> {item}
+                    </List.Item>
+                  </a>
+                )}
+              />
+            </Collapse.Panel>
+          ))}
+        </Collapse>
+      </div>
     </main>
   );
 };

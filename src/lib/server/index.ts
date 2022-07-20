@@ -80,6 +80,7 @@ export async function getBook(
   const chapters = await Promise.all(
     book.chapters.map((e) => getSections(docPath, book.pathName, e))
   );
+  chapters.sort((a, b) => (a?.index || 0) - (b?.index || 0));
   const payload = {
     ...book,
     chapters,

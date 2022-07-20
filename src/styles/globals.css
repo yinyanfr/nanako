@@ -12,6 +12,10 @@ a {
   text-decoration: none;
 }
 
+main {
+  min-height: 80vh;
+}
+
 * {
   box-sizing: border-box;
 }
