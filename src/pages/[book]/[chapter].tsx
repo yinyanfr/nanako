@@ -1,5 +1,10 @@
 import { ContentReader } from "@/components";
-import { convertContentCC, getContents } from "@/lib/server";
+import {
+  convertContentCC,
+  convertMenuCC,
+  getBook,
+  getContents,
+} from "@/lib/server";
 import {
   BookOutlined,
   FileTextOutlined,
@@ -19,11 +24,13 @@ const docPath = path.join(__dirname, "..", "..", "..", "..", "docs");
 
 interface ChapterProps {
   content: ContentPayload;
+  book: MenuPayload;
   cookies: Record<string, string>;
 }
 
-const Chapter: FC<ChapterProps> = ({ content, cookies }) => {
+const Chapter: FC<ChapterProps> = ({ content, book, cookies }) => {
   const [fontSize, setFontSize] = useState(parseInt(cookies.fontSize) || 14);
+  const { chapters } = book;
 
   return (
     <main>
@@ -50,7 +57,7 @@ const Chapter: FC<ChapterProps> = ({ content, cookies }) => {
       </Breadcrumb>
 
       <ReaderContext.Provider value={{ fontSize, setFontSize }}>
-        <ContentReader content={content} />
+        <ContentReader content={content} chapters={chapters} />
       </ReaderContext.Provider>
     </main>
   );
@@ -61,12 +68,14 @@ export const getServerSideProps: GetServerSideProps<ChapterProps> = async (
 ) => {
   const { book, chapter } = context.params || {};
   const content = await getContents(docPath, book as string, chapter as string);
+  const bookPayload = await getBook(docPath, book as string);
   const cookies = nookies.get(context);
+  const hant = context.locale === "zh-Hant";
 
   return {
     props: {
-      content:
-        context.locale === "zh-Hant" ? convertContentCC(content) : content,
+      content: hant ? convertContentCC(content) : content,
+      book: hant ? convertMenuCC(bookPayload) : bookPayload,
       cookies,
     },
   };

@@ -1,6 +1,10 @@
 import fs from "fs/promises";
 import path from "path";
 import { Converter } from "opencc-js";
+import NodeCache from "node-cache";
+
+const cache = new NodeCache({ stdTTL: 600 });
+const LONG_TTL = 3600;
 
 async function readMeta(dirPath: string): Promise<Meta> {
   const metaReader = await fs.readFile(path.join(dirPath, "meta.json"));
@@ -66,19 +70,36 @@ export async function getBook(
   docPath: string,
   bookPath: string
 ): Promise<MenuPayload> {
+  const cacheKey = `book-${bookPath}`;
+  const cached = cache.get<MenuPayload>(cacheKey);
+  if (cached) {
+    return cached;
+  }
+
   const book = await getChapters(docPath, bookPath);
   const chapters = await Promise.all(
     book.chapters.map((e) => getSections(docPath, book.pathName, e))
   );
-  return {
+  const payload = {
     ...book,
     chapters,
   };
+  cache.set(cacheKey, payload);
+
+  return payload;
 }
 
 export async function getMenu(docPath: string): Promise<MenuPayload[]> {
+  const cacheKey = "menu";
+  const cached = cache.get<MenuPayload[]>(cacheKey);
+  if (cached) {
+    return cached;
+  }
+
   const books = await fs.readdir(docPath);
   const menu = await Promise.all(books.map((e) => getBook(docPath, e)));
+  cache.set(cacheKey, menu, LONG_TTL);
+
   return menu;
 }
 
@@ -88,6 +109,12 @@ async function readContent(
   chapterPath: string,
   sectionPath: string
 ) {
+  const cacheKey = `text-${bookPath}-${chapterPath}-${sectionPath}`;
+  const cached = cache.get<string>(cacheKey);
+  if (cached) {
+    return cached;
+  }
+
   const sectionCompletePath = path.join(
     docPath,
     bookPath,
@@ -95,7 +122,10 @@ async function readContent(
     sectionPath
   );
   const reader = await fs.readFile(sectionCompletePath);
-  return reader.toString();
+  const content = reader.toString();
+  cache.set(cacheKey, content, LONG_TTL);
+
+  return content;
 }
 
 export async function getContents(
@@ -103,6 +133,12 @@ export async function getContents(
   bookPath: string,
   chapterPath: string
 ): Promise<ContentPayload> {
+  const cacheKey = `contents-${bookPath}-${chapterPath}`;
+  const cached = cache.get<ContentPayload>(cacheKey);
+  if (cached) {
+    return cached;
+  }
+
   const chapters = await getChapters(docPath, bookPath);
   const sections = await getSections(docPath, bookPath, chapterPath);
   const readers = await Promise.all(
@@ -114,19 +150,28 @@ export async function getContents(
     ...e,
     content: readers[i].toString(),
   }));
-  return {
+  const payload = {
     bookPath: bookPath,
     bookTitle: chapters.title,
     chapterTitle: sections.title,
     chapterPath: sections.pathName,
     contents,
   };
+  cache.set(cacheKey, payload);
+
+  return payload;
 }
 
 export function convertMenuCC(menu: MenuPayload): MenuPayload {
+  const cacheKey = "menucc";
+  const cached = cache.get<MenuPayload>(cacheKey);
+  if (cached) {
+    return cached;
+  }
+
   const convert = Converter({ from: "cn", to: "twp" });
 
-  return {
+  const converted = {
     ...menu,
     title: convert(menu.title),
     chapters: menu.chapters.map((e) => ({
@@ -138,12 +183,21 @@ export function convertMenuCC(menu: MenuPayload): MenuPayload {
       })),
     })),
   };
+  cache.set(cacheKey, converted, LONG_TTL);
+
+  return converted;
 }
 
 export function convertContentCC(content: ContentPayload): ContentPayload {
+  const cacheKey = `contentcc-${content.bookPath}-${content.chapterPath}`;
+  const cached = cache.get<ContentPayload>(cacheKey);
+  if (cached) {
+    return cached;
+  }
+
   const convert = Converter({ from: "cn", to: "twp" });
 
-  return {
+  const converted = {
     ...content,
     bookTitle: convert(content.bookTitle),
     chapterTitle: convert(content.chapterTitle),
@@ -153,4 +207,7 @@ export function convertContentCC(content: ContentPayload): ContentPayload {
       content: convert(e.content),
     })),
   };
+  cache.set(cacheKey, converted, LONG_TTL);
+
+  return converted;
 }

@@ -16,11 +16,13 @@
     "express": "^4.18.1",
     "next": "12.2.1",
     "next-dark-mode": "^3.0.0",
+    "node-cache": "^5.1.2",
     "nookies": "^2.5.2",
     "opencc-js": "^1.0.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-markdown": "^8.0.3",
+    "react-scroll-detect": "^1.2.0",
     "sanitize-filename": "^1.6.3"
   },
   "devDependencies": {
