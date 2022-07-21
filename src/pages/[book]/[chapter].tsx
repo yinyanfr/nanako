@@ -1,4 +1,4 @@
-import { ContentReader, DynamicDarkReader } from "@/components";
+import { ContentReader, DynamicDarkReader, NotFound } from "@/components";
 import {
   convertContentCC,
   convertMenuCC,
@@ -16,7 +16,7 @@ import Link from "next/link";
 import path from "path";
 import type { FC } from "react";
 import { useState } from "react";
-import nookies, { setCookie } from "nookies";
+import nookies from "nookies";
 import { ReaderContext } from "@/lib/client";
 import Head from "next/head";
 
@@ -24,25 +24,25 @@ import Head from "next/head";
 const docPath = path.join(__dirname, "..", "..", "..", "..", "docs");
 
 interface ChapterProps {
-  content: ContentPayload;
-  book: MenuPayload;
+  content?: ContentPayload;
+  book?: MenuPayload;
   cookies: Record<string, string>;
 }
 
 const Chapter: FC<ChapterProps> = ({ content, book, cookies }) => {
   const [fontSize, setFontSize] = useState(parseInt(cookies.fontSize) || 16);
-  const { chapters } = book;
+  const { chapters } = book || {};
 
   return (
     <main>
       <Head>
         <title>
-          {content.bookTitle} - {content.chapterTitle}
+          {content?.bookTitle} - {content?.chapterTitle}
         </title>
         <meta
           key="title"
           property="og:title"
-          content={`${content.bookTitle} - ${content.chapterTitle}`}
+          content={`${content?.bookTitle} - ${content?.chapterTitle}`}
         />
       </Head>
 
@@ -55,30 +55,33 @@ const Chapter: FC<ChapterProps> = ({ content, book, cookies }) => {
               </a>
             </Link>
           </Breadcrumb.Item>
-          <Breadcrumb.Item key={content.bookPath}>
-            <Link href={`/${content.bookPath}`}>
-              <a>
-                <BookOutlined /> {content.bookTitle}
-              </a>
-            </Link>
-          </Breadcrumb.Item>
-          <Breadcrumb.Item key={content.chapterPath}>
-            <a>
-              <FileTextOutlined /> {content.chapterTitle}
-            </a>
-          </Breadcrumb.Item>
+          {content ? (
+            <>
+              <Breadcrumb.Item key={content?.bookPath}>
+                <Link href={`/${content?.bookPath}`}>
+                  <a>
+                    <BookOutlined /> {content?.bookTitle}
+                  </a>
+                </Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item key={content?.chapterPath}>
+                <a>
+                  <FileTextOutlined /> {content?.chapterTitle}
+                </a>
+              </Breadcrumb.Item>
+            </>
+          ) : null}
         </Breadcrumb>
 
-        <DynamicDarkReader
-          defaultDarken={cookies.theme === "dark"}
-          onChange={(isDark) => {
-            setCookie(null, "theme", isDark ? "dark" : "light", { path: "/" });
-          }}
-        />
+        <DynamicDarkReader defaultDarken={cookies.theme === "dark"} />
       </header>
 
       <ReaderContext.Provider value={{ fontSize, setFontSize }}>
-        <ContentReader content={content} chapters={chapters} />
+        {content ? (
+          <ContentReader content={content} chapters={chapters} />
+        ) : (
+          <NotFound />
+        )}
       </ReaderContext.Provider>
     </main>
   );
@@ -88,18 +91,31 @@ export const getServerSideProps: GetServerSideProps<ChapterProps> = async (
   context
 ) => {
   const { book, chapter } = context.params || {};
-  const content = await getContents(docPath, book as string, chapter as string);
-  const bookPayload = await getBook(docPath, book as string);
+
   const cookies = nookies.get(context);
   const hant = context.locale === "zh-Hant";
 
-  return {
-    props: {
-      content: hant ? convertContentCC(content) : content,
-      book: hant ? convertMenuCC(bookPayload) : bookPayload,
-      cookies,
-    },
-  };
+  try {
+    const content = await getContents(
+      docPath,
+      book as string,
+      chapter as string
+    );
+    const bookPayload = await getBook(docPath, book as string);
+    return {
+      props: {
+        content: hant ? convertContentCC(content) : content,
+        book: hant ? convertMenuCC(bookPayload) : bookPayload,
+        cookies,
+      },
+    };
+  } catch {
+    return {
+      props: {
+        cookies,
+      },
+    };
+  }
 };
 
 export default Chapter;

@@ -9,24 +9,17 @@ import {
 import { Menu } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import type { Dispatch, FC, SetStateAction } from "react";
+import type { FC } from "react";
 import { useId, useMemo, useContext, useState, useEffect } from "react";
 import { setCookie } from "nookies";
 import { useResponsive } from "ahooks";
 
 interface ContentNavProps {
-  content: ContentPayload;
-  chapters: MenuPayload["chapters"];
-  scrollIndex: number;
-  setScrollIndex: Dispatch<SetStateAction<number>>;
+  content?: ContentPayload;
+  chapters?: MenuPayload["chapters"];
 }
 
-const ContentNav: FC<ContentNavProps> = ({
-  content,
-  chapters,
-  scrollIndex,
-  setScrollIndex,
-}) => {
+const ContentNav: FC<ContentNavProps> = ({ content, chapters }) => {
   const id = useId();
   const router = useRouter();
   const { fontSize, setFontSize } = useContext(ReaderContext);
@@ -43,22 +36,13 @@ const ContentNav: FC<ContentNavProps> = ({
   const summaryItems = useMemo(() => {
     return content?.contents?.map((e) => ({
       key: `${id}-${e.index}`, // starting from 1
-      label: (
-        <a
-          href={`#${e.index}`}
-          onClick={() => {
-            setScrollIndex(e.index - 1); // starting from 0
-          }}
-        >
-          {e.title}
-        </a>
-      ),
+      label: <a href={`#${e.index}`}>{e.title}</a>,
     }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [content, id]);
 
   const chapterItems = useMemo(() => {
-    return chapters.map((e) => ({
+    return chapters?.map((e) => ({
       key: e.pathName,
       label: (
         <Link href={`/${router.query.book}/${e.pathName}`}>
@@ -139,7 +123,6 @@ const ContentNav: FC<ContentNavProps> = ({
       mode="inline"
       items={menuItems}
       selectedKeys={[
-        `${id}-${scrollIndex + 1}`,
         router.query.chapter as string,
         router.locale === "zh-Hant" ? "zh-Hant" : "zh-Hans",
         `font-${fontSize}`,

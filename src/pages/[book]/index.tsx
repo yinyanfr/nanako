@@ -10,12 +10,12 @@ import type { FC } from "react";
 import { useId } from "react";
 import { convertMenuCC, getBook } from "@/lib/server";
 import path from "path";
-import nookies, { setCookie } from "nookies";
+import nookies from "nookies";
 import Head from "next/head";
-import { DynamicDarkReader } from "@/components";
+import { DynamicDarkReader, NotFound } from "@/components";
 
 interface BookProps {
-  book: MenuPayload;
+  book?: MenuPayload;
   cookies: Record<string, string>;
 }
 
@@ -28,8 +28,8 @@ const Book: FC<BookProps> = ({ book, cookies }) => {
   return (
     <main>
       <Head>
-        <title>{book.title}</title>
-        <meta key="title" property="og:title" content={book.title} />
+        <title>{book?.title}</title>
+        <meta key="title" property="og:title" content={book?.title} />
       </Head>
       <header className="header">
         <Breadcrumb>
@@ -40,77 +40,80 @@ const Book: FC<BookProps> = ({ book, cookies }) => {
               </a>
             </Link>
           </Breadcrumb.Item>
-          <Breadcrumb.Item key={book.pathName}>
-            <a>
-              <BookOutlined /> {book.title}
-            </a>
-          </Breadcrumb.Item>
+          {book ? (
+            <Breadcrumb.Item key={book?.pathName}>
+              <a>
+                <BookOutlined /> {book?.title}
+              </a>
+            </Breadcrumb.Item>
+          ) : null}
         </Breadcrumb>
 
-        <DynamicDarkReader
-          defaultDarken={cookies.theme === "dark"}
-          onChange={(isDark) => {
-            setCookie(null, "theme", isDark ? "dark" : "light", { path: "/" });
-          }}
-        />
+        <DynamicDarkReader defaultDarken={cookies.theme === "dark"} />
       </header>
 
       <div className="container">
-        <h1>{book.title}</h1>
+        {book ? (
+          <section>
+            <h1>{book?.title}</h1>
 
-        <h2>目录</h2>
-        <Collapse bordered={false}>
-          {book.chapters.map((e) => (
-            <Collapse.Panel
-              key={`${id}-chapters-${e.pathName}`}
-              header={e.title}
+            <h2>目录</h2>
+            <Collapse bordered={false}>
+              {book?.chapters.map((e) => (
+                <Collapse.Panel
+                  key={`${id}-chapters-${e.pathName}`}
+                  header={e.title}
+                >
+                  <List
+                    dataSource={e.sections}
+                    renderItem={(item) => (
+                      <Link
+                        key={`${id}-${item.index}`}
+                        href={`/${book.pathName}/${e.pathName}#${item.index}`}
+                      >
+                        <a>
+                          <List.Item>{item.title}</List.Item>
+                        </a>
+                      </Link>
+                    )}
+                  />
+                </Collapse.Panel>
+              ))}
+            </Collapse>
+
+            <Divider />
+
+            <h2>下载</h2>
+            <Collapse
+              bordered={false}
+              defaultActiveKey={book?.chapters
+                .filter((e) => e.archives?.length)
+                .map((e) => `${id}-archives-${e.pathName}`)}
             >
-              <List
-                dataSource={e.sections}
-                renderItem={(item) => (
-                  <Link
-                    key={`${id}-${item.index}`}
-                    href={`/${book.pathName}/${e.pathName}#${item.index}`}
-                  >
-                    <a>
-                      <List.Item>{item.title}</List.Item>
-                    </a>
-                  </Link>
-                )}
-              />
-            </Collapse.Panel>
-          ))}
-        </Collapse>
-
-        <Divider />
-
-        <h2>下载</h2>
-        <Collapse
-          bordered={false}
-          defaultActiveKey={book.chapters
-            .filter((e) => e.archives?.length)
-            .map((e) => `${id}-archives-${e.pathName}`)}
-        >
-          {book.chapters.map((e) => (
-            <Collapse.Panel
-              key={`${id}-archives-${e.pathName}`}
-              header={e.title}
-            >
-              <List
-                dataSource={e.archives}
-                renderItem={(item) => (
-                  <a
-                    href={`/api/archive?book=${book.pathName}&chapter=${e.pathName}&archive=${item}`}
-                  >
-                    <List.Item>
-                      <DownloadOutlined /> {item}
-                    </List.Item>
-                  </a>
-                )}
-              />
-            </Collapse.Panel>
-          ))}
-        </Collapse>
+              {book?.chapters?.map((e) => (
+                <Collapse.Panel
+                  key={`${id}-archives-${e.pathName}`}
+                  header={e.title}
+                >
+                  <List
+                    dataSource={e.archives}
+                    renderItem={(item) => (
+                      <a
+                        href={`/api/archive?book=${book?.pathName}&chapter=${e.pathName}&archive=${item}`}
+                      >
+                        <List.Item>
+                          <DownloadOutlined /> {item}
+                        </List.Item>
+                      </a>
+                    )}
+                  />
+                </Collapse.Panel>
+              ))}
+            </Collapse>
+          </section>
+        ) : (
+          <NotFound />
+        )}
       </div>
     </main>
   );
@@ -120,16 +123,26 @@ export const getServerSideProps: GetServerSideProps<BookProps> = async (
   context
 ) => {
   const { book } = context.params || {};
-  const bookPayload = await getBook(docPath, book as string);
   const cookies = nookies.get(context);
 
-  return {
-    props: {
-      book:
-        context.locale === "zh-Hant" ? convertMenuCC(bookPayload) : bookPayload,
-      cookies,
-    },
-  };
+  try {
+    const bookPayload = await getBook(docPath, book as string);
+    return {
+      props: {
+        book:
+          context.locale === "zh-Hant"
+            ? convertMenuCC(bookPayload)
+            : bookPayload,
+        cookies,
+      },
+    };
+  } catch {
+    return {
+      props: {
+        cookies,
+      },
+    };
+  }
 };
 
 export default Book;

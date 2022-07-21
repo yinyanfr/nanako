@@ -7,13 +7,13 @@ import { Fragment, useId } from "react";
 import styles from "../styles/Home.module.css";
 import { getMenu } from "@/lib/server";
 import path from "path";
-import nookies, { setCookie } from "nookies";
+import nookies from "nookies";
 import { useRouter } from "next/router";
 import { DynamicDarkReader } from "@/components";
 import config from "@/nanako.json";
 
 interface HomeProps {
-  menu: Record<string, MenuPayload[]>;
+  menu?: Record<string, MenuPayload[]>;
   cookies: Record<string, string>;
 }
 
@@ -41,12 +41,7 @@ const Home: FC<HomeProps> = ({ menu, cookies }) => {
           </Breadcrumb.Item>
         </Breadcrumb>
 
-        <DynamicDarkReader
-          defaultDarken={cookies.theme === "dark"}
-          onChange={(isDark) => {
-            setCookie(null, "theme", isDark ? "dark" : "light", { path: "/" });
-          }}
-        />
+        <DynamicDarkReader defaultDarken={cookies.theme === "dark"} />
       </header>
 
       <div className="container">
@@ -56,8 +51,8 @@ const Home: FC<HomeProps> = ({ menu, cookies }) => {
           <Fragment key={e}>
             <h2>{translations[e]}</h2>
             <Card>
-              {menu[e]?.length ? (
-                menu[e].map((book) => (
+              {menu?.[e]?.length ? (
+                menu?.[e]?.map((book) => (
                   <Card.Grid
                     key={`${id}-${e}-${book.pathName}`}
                     className={styles["card-grid"]}
@@ -86,15 +81,23 @@ const Home: FC<HomeProps> = ({ menu, cookies }) => {
 export const getServerSideProps: GetServerSideProps<HomeProps> = async (
   context
 ) => {
-  const menu = await getMenu(docPath);
   const cookies = nookies.get(context);
 
-  return {
-    props: {
-      menu,
-      cookies,
-    },
-  };
+  try {
+    const menu = await getMenu(docPath);
+    return {
+      props: {
+        menu,
+        cookies,
+      },
+    };
+  } catch {
+    return {
+      props: {
+        cookies,
+      },
+    };
+  }
 };
 
 export default Home;

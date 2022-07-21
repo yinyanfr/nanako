@@ -13,6 +13,10 @@
   top: 20px;
 }
 
+.reader {
+  flex: 1;
+}
+
 @media only screen and (max-width: 992px) {
   .reader-wrapper {
     flex-direction: column;
