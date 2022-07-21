@@ -37,6 +37,10 @@ main {
   /* float: right; */
 }
 
+.underlined:not(:last-child) {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
 @media only screen and (max-width: 992px) {
   .container {
     padding: 1rem;

@@ -54,7 +54,7 @@ const Book: FC<BookProps> = ({ book, cookies }) => {
 
       <div className="container">
         {book ? (
-          <section>
+          <>
             <h1>{book?.title}</h1>
 
             <h2>目录</h2>
@@ -67,14 +67,18 @@ const Book: FC<BookProps> = ({ book, cookies }) => {
                   <List
                     dataSource={e.sections}
                     renderItem={(item) => (
-                      <Link
-                        key={`${id}-${item.index}`}
-                        href={`/${book.pathName}/${e.pathName}#${item.index}`}
-                      >
-                        <a>
-                          <List.Item>{item.title}</List.Item>
-                        </a>
-                      </Link>
+                      <div className="underlined">
+                        <Link
+                          key={`${id}-${item.index}`}
+                          href={`/${book.pathName}/${e.pathName}${
+                            item.index === 1 ? "" : "#" + item.index
+                          }`}
+                        >
+                          <a>
+                            <List.Item>{item.title}</List.Item>
+                          </a>
+                        </Link>
+                      </div>
                     )}
                   />
                 </Collapse.Panel>
@@ -110,7 +114,7 @@ const Book: FC<BookProps> = ({ book, cookies }) => {
                 </Collapse.Panel>
               ))}
             </Collapse>
-          </section>
+          </>
         ) : (
           <NotFound />
         )}
