@@ -1,11 +1,11 @@
 {
   "name": "nanako",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "scripts": {
-    "dev": "node server.js",
+    "dev": "node nanako.js",
     "build": "next build",
-    "start": "cross-env NODE_ENV=production node server.js",
+    "start": "cross-env NODE_ENV=production node nanako.js",
     "lint": "next lint"
   },
   "dependencies": {

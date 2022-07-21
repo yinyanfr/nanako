@@ -5,7 +5,6 @@ import config from "@/nanako.json";
 
 const nanako = (
   <a
-    className="natural"
     href="https://github.com/yinyanfr/nanako"
     target="_blank"
     rel="noopener noreferrer"

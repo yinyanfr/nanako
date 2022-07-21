@@ -8,12 +8,40 @@ body {
 }
 
 a {
-  /* color: inherit; */
+  color: inherit;
   text-decoration: none;
 }
 
-a.natural {
-  color: inherit
+a.blue {
+  color: #1890ff
+}
+
+h4,
+h5 {
+  font-weight: bold;
+}
+
+.blockquote {
+  color: black;
+  background: #f5f2f0;
+  text-shadow: 0 1px white;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 1em;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+  padding: 0.2em;
+  overflow: auto;
 }
 
 main {

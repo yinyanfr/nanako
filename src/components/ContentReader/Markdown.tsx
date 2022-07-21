@@ -30,9 +30,21 @@ const MarkDown: FC<MarkDownProps> = ({ content, book, chapter }) => {
               {String(children).replace(/\n$/, "")}
             </SyntaxHighlighter>
           ) : (
-            <code className={className} {...props}>
+            <code className={`${className} blockquote`} {...props}>
               {children}
             </code>
+          );
+        },
+        a({ className, children, ...props }) {
+          return (
+            <a
+              className={`${className} blue`}
+              {...props}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {children}
+            </a>
           );
         },
       }}

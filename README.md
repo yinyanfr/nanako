@@ -88,7 +88,7 @@ yarn start
 
 # or
 
-NODE_ENV=production node server.js
+NODE_ENV=production node nanako.js
 ```
 
 Ask Next.js for anything that goes wrong with deployment.
