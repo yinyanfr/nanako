@@ -8,8 +8,12 @@ body {
 }
 
 a {
-  color: inherit;
+  /* color: inherit; */
   text-decoration: none;
+}
+
+a.natural {
+  color: inherit
 }
 
 main {

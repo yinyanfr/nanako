@@ -60,7 +60,7 @@ const Home: FC<HomeProps> = ({ menu, cookies }) => {
                       router.push(`/${book.pathName}`);
                     }}
                   >
-                    <a>
+                    <a className="natural">
                       <BookOutlined /> {book.title}
                     </a>
                   </Card.Grid>
