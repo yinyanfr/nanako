@@ -62,11 +62,10 @@ main {
 }
 
 .markdown>*>img {
-  max-width: 75vw;
+  max-width: min(1000px, 75vw);
   margin-left: auto;
   margin-right: auto;
   display: block;
-  /* float: right; */
 }
 
 .underlined:not(:last-child) {
@@ -76,5 +75,9 @@ main {
 @media only screen and (max-width: 992px) {
   .container {
     padding: 1rem;
+  }
+
+  .markdown>*>img {
+    max-width: 90vw
   }
 }

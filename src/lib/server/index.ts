@@ -2,9 +2,10 @@ import fs from "fs/promises";
 import path from "path";
 import { Converter } from "opencc-js";
 import NodeCache from "node-cache";
+import { cacheTTL, cacheTTLLong } from "@/nanako.json";
 
-const cache = new NodeCache({ stdTTL: 600 });
-const LONG_TTL = 3600;
+const cache = new NodeCache({ stdTTL: cacheTTL || 600 });
+const LONG_TTL = cacheTTLLong || 3600;
 
 async function readMeta(dirPath: string): Promise<Meta> {
   const metaReader = await fs.readFile(path.join(dirPath, "meta.json"));
