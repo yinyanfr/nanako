@@ -5,7 +5,7 @@ import type { FC } from "react";
 import { useId, useContext } from "react";
 import ContentNav from "./ContentNav";
 import MarkDown from "./Markdown";
-import styles from "./index.module.css";
+import styles from "./index.module.scss";
 
 interface ContentReaderProps {
   content?: ContentPayload;

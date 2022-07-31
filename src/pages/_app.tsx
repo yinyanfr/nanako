@@ -1,5 +1,7 @@
+import "bulma/sass/utilities/_all.sass";
+import "@/styles/table.sass";
 import "antd/dist/antd.css";
-import "../styles/globals.css";
+import "@/styles/globals.scss";
 import type { AppProps } from "next/app";
 import { Footer } from "@/components";
 import CookieConsent from "react-cookie-consent";

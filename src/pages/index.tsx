@@ -4,7 +4,7 @@ import type { GetServerSideProps } from "next/types";
 import Head from "next/head";
 import type { FC } from "react";
 import { Fragment, useId } from "react";
-import styles from "../styles/Home.module.css";
+import styles from "../styles/Home.module.scss";
 import { getMenu } from "@/lib/server";
 import path from "path";
 import nookies from "nookies";

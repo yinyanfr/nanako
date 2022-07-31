@@ -2,7 +2,9 @@ import fs from "fs/promises";
 import path from "path";
 import { Converter } from "opencc-js";
 import NodeCache from "node-cache";
-import { cacheTTL, cacheTTLLong } from "@/nanako.json";
+import config from "@/nanako.json";
+
+const { cacheTTL, cacheTTLLong } = config;
 
 const cache = new NodeCache({ stdTTL: cacheTTL || 600 });
 const LONG_TTL = cacheTTLLong || 3600;

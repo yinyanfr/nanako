@@ -1,6 +1,6 @@
 import { GithubOutlined } from "@ant-design/icons";
 import type { FC } from "react";
-import styles from "./index.module.css";
+import styles from "./index.module.scss";
 import config from "@/nanako.json";
 
 const nanako = (

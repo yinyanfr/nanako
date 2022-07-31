@@ -75,7 +75,9 @@ Will automatically redirect to `/images/nanzhi1.jpg`
     "casual": "随笔",
     "tutorial": "教程",
     "uncategorized": "未分类"
-  }
+  },
+  "cacheTTL": 600, // cache ttl for chapters fetch
+  "cacheTTLLong": 3600 // cache ttl for books and sections fetch
 }
 ```
 
