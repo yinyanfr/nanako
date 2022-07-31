@@ -46,6 +46,7 @@ h5 {
 
 main {
   min-height: 80vh;
+  margin: 0 auto;
 }
 
 * {
@@ -62,7 +63,7 @@ main {
 }
 
 .markdown>*>img {
-  max-width: min(1000px, 75vw);
+  max-width: min(800px, 75vw);
   margin-left: auto;
   margin-right: auto;
   display: block;
@@ -72,7 +73,7 @@ main {
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
-@media only screen and (max-width: 992px) {
+@media only screen and (max-width: 1376px) {
   .container {
     padding: 1rem;
   }

@@ -1,8 +1,9 @@
 .reader-wrapper {
   margin: 2rem auto;
-  width: 1000px;
+  width: 800px;
   max-width: 90vw;
   display: flex;
+  justify-content: center;
   flex-direction: row-reverse;
   gap: 20px;
 }
@@ -17,9 +18,10 @@
   flex: 1;
 }
 
-@media only screen and (max-width: 992px) {
+@media only screen and (max-width: 1376px) {
   .reader-wrapper {
     flex-direction: column;
+    min-width: 90vw;
   }
 
   .reader-nav {
