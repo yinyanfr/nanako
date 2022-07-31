@@ -1,7 +1,21 @@
 {
   "name": "nanako",
-  "version": "0.4.0",
-  "private": true,
+  "version": "0.5.0",
+  "private": false,
+  "description": "Yet another static site generator",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yinyanfr/nanako.git"
+  },
+  "keywords": [
+    "nextjs",
+    "static site generator"
+  ],
+  "bugs": {
+    "url": "https://github.com/yinyanfr/nanako/issues"
+  },
+  "homepage": "https://github.com/yinyanfr/nanako#readme",
   "scripts": {
     "dev": "node nanako.js",
     "build": "next build",
