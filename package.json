@@ -1,6 +1,6 @@
 {
   "name": "nanako",
-  "version": "0.5.0",
+  "version": "1.0.0",
   "private": false,
   "description": "Yet another static site generator",
   "license": "MIT",
@@ -16,6 +16,7 @@
     "url": "https://github.com/yinyanfr/nanako/issues"
   },
   "homepage": "https://github.com/yinyanfr/nanako#readme",
+  "main": "nanako.js",
   "scripts": {
     "dev": "node nanako.js",
     "build": "next build",

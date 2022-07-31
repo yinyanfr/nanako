@@ -1,6 +1,13 @@
 # nanako
 
-Yet another static site generator
+[![npm](https://img.shields.io/npm/v/nanako.svg)](https://www.npmjs.com/package/nanako)
+![react](https://img.shields.io/npm/dependency-version/nanako/react)
+![npm](https://img.shields.io/npm/l/nanako.svg)
+![size](https://img.shields.io/github/repo-size/yinyanfr/nanako)
+
+Yet another static site generator.
+
+Doesn't really need to be put on npm.
 
 ## Quick start
 
@@ -56,7 +63,7 @@ docs
 ### Using images in markdown
 
 ```markdown
-![nanzhi1](./nanzhi1.jpg)
+![nanzhi1](./images/nanzhi1.jpg)
 ```
 
 Will automatically redirect to `/images/nanzhi1.jpg`
