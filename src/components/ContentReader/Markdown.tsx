@@ -4,6 +4,8 @@ import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 
 interface MarkDownProps {
   content: string;
@@ -15,8 +17,8 @@ const MarkDown: FC<MarkDownProps> = ({ content, book, chapter }) => {
   return (
     <ReactMarkdown
       className="markdown"
-      rehypePlugins={[rehypeRaw]}
-      remarkPlugins={[remarkGfm]}
+      rehypePlugins={[rehypeRaw, rehypeKatex]}
+      remarkPlugins={[remarkGfm, remarkMath]}
       transformImageUri={(uri) => {
         const image = path.basename(uri);
         return `/api/image?book=${book}&chapter=${chapter}&image=${image}`;
