@@ -1,6 +1,6 @@
 {
   "name": "nanako",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": false,
   "description": "Yet another static site generator",
   "license": "MIT",
@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/yinyanfr/nanako#readme",
   "main": "nanako.js",
+  "bin": "src/cli/index.js",
   "scripts": {
     "dev": "node nanako.js",
     "build": "next build",
@@ -27,6 +28,7 @@
     "@ant-design/icons": "^5.0.1",
     "ahooks": "^3.7.6",
     "antd": "^5.4.2",
+    "args": "^5.0.3",
     "bulma": "^0.9.4",
     "cross-env": "^7.0.3",
     "express": "^4.18.2",
@@ -34,6 +36,8 @@
     "node-cache": "^5.1.2",
     "nookies": "^2.5.2",
     "opencc-js": "^1.0.5",
+    "ora": "5",
+    "prompts": "^2.4.2",
     "react": "^18.2.0",
     "react-cookie-consent": "^7.5.0",
     "react-darkreader": "^1.5.6",
@@ -47,8 +51,10 @@
     "sanitize-filename": "^1.6.3"
   },
   "devDependencies": {
+    "@types/args": "^5.0.0",
     "@types/node": "18.0.3",
     "@types/opencc-js": "^1.0.0",
+    "@types/prompts": "^2.4.4",
     "@types/react": "18.0.15",
     "@types/react-dom": "18.0.6",
     "@types/react-syntax-highlighter": "^15.5.3",

@@ -1,15 +1,53 @@
 # nanako
 
-[![npm](https://img.shields.io/npm/v/nanako.svg)](https://www.npmjs.com/package/nanako)
-![react](https://img.shields.io/npm/dependency-version/nanako/react)
-![npm](https://img.shields.io/npm/l/nanako.svg)
-![size](https://img.shields.io/github/repo-size/yinyanfr/nanako)
+[![npm](https://img.shields.io/npm/v/nanako.svg?style=flat-square)](https://www.npmjs.com/package/nanako)
+![react](https://img.shields.io/npm/dependency-version/nanako/react?style=flat-square)
+![next](https://img.shields.io/npm/dependency-version/nanako/next?style=flat-square)
+![license](https://img.shields.io/npm/l/nanako.svg?style=flat-square)
+![size](https://img.shields.io/github/repo-size/yinyanfr/nanako?style=flat-square)
 
 Yet another static site generator.
 
-Doesn't really need to be put on npm.
+## :star2: Features
 
-## Quick start
+- Designed for light novels
+- CLI tools
+- Sync tool (TODO)
+
+## :green_book: Quick start
+
+```bash
+npx nanako create my-awesome-blog
+```
+
+## :wrench: CLI
+
+```bash
+Usage: nanako [options] [command]
+
+Commands:
+  add, a     Add a book or a chapter, or both.
+  create, c  Create a nanako project.
+  help       Display help
+  version    Display version
+
+Options:
+  -h, --help     Output usage information
+  -v, --version  Output the version number
+  -y, --yes      Optional: skip the prompts and init the book or the chapter with the default meta.json.
+
+Examples:
+  - Create a nanako instance in folder my-awesome-blog.
+  $ npx nanako create my-awesome-blog
+
+  - Create a book.
+  $ npx nanako add my-awesome-book
+
+  - Create a chapter under my-awesome-book
+  $ npx nanako add my-awesome-book my-awesome-chapter
+```
+
+## :books: Manual Content Management
 
 ### Putting your docs
 
@@ -88,7 +126,7 @@ Will automatically redirect to `/images/nanzhi1.jpg`
 }
 ```
 
-### Deploy
+## :rocket: Deployment
 
 ```bash
 yarn build
@@ -100,4 +138,4 @@ yarn start
 NODE_ENV=production node nanako.js
 ```
 
-Ask Next.js for anything that goes wrong with deployment.
+Please refer to the [Next.js documentations](https://nextjs.org/docs) for anything that goes wrong with deployment.
