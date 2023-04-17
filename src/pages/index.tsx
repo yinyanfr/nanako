@@ -35,11 +35,14 @@ const Home: FC<HomeProps> = ({ menu, cookies }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <header className="header">
-        <Breadcrumb>
-          <Breadcrumb.Item key="/">
-            <HomeOutlined />
-          </Breadcrumb.Item>
-        </Breadcrumb>
+        <Breadcrumb
+          items={[
+            {
+              key: "/",
+              title: <HomeOutlined />,
+            },
+          ]}
+        />
 
         <DynamicDarkReader defaultDarken={cookies.theme === "dark"} />
       </header>

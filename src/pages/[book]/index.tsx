@@ -32,22 +32,22 @@ const Book: FC<BookProps> = ({ book, cookies }) => {
         <meta key="title" property="og:title" content={book?.title} />
       </Head>
       <header className="header">
-        <Breadcrumb>
-          <Breadcrumb.Item key="/">
-            <Link href="/">
-              <a>
-                <HomeOutlined />
-              </a>
-            </Link>
-          </Breadcrumb.Item>
-          {book ? (
-            <Breadcrumb.Item key={book?.pathName}>
-              <a>
-                <BookOutlined /> {book?.title}
-              </a>
-            </Breadcrumb.Item>
-          ) : null}
-        </Breadcrumb>
+        <Breadcrumb
+          items={[
+            {
+              key: "/",
+              title: <HomeOutlined />,
+            },
+            {
+              key: book?.pathName,
+              title: (
+                <a>
+                  <BookOutlined /> {book?.title}
+                </a>
+              ),
+            },
+          ]}
+        />
 
         <DynamicDarkReader defaultDarken={cookies.theme === "dark"} />
       </header>
@@ -74,9 +74,7 @@ const Book: FC<BookProps> = ({ book, cookies }) => {
                             item.index === 1 ? "" : "#" + item.index
                           }`}
                         >
-                          <a>
-                            <List.Item>{item.title}</List.Item>
-                          </a>
+                          <List.Item>{item.title}</List.Item>
                         </Link>
                       </div>
                     )}

@@ -1,6 +1,6 @@
 import "bulma/sass/utilities/_all.sass";
 import "@/styles/table.sass";
-import "antd/dist/antd.css";
+import "antd/dist/reset.css";
 import "@/styles/globals.scss";
 import "katex/dist/katex.min.css";
 

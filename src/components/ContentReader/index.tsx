@@ -1,5 +1,5 @@
 import { ReaderContext } from "@/lib/client";
-import { BackTop, Divider } from "antd";
+import { BackTop, Divider, FloatButton } from "antd";
 import { useRouter } from "next/router";
 import type { FC } from "react";
 import { useId, useContext } from "react";
@@ -35,7 +35,7 @@ const ContentReader: FC<ContentReaderProps> = ({ content, chapters }) => {
           </article>
         ))}
       </div>
-      <BackTop />
+      <FloatButton.BackTop />
     </section>
   );
 };
