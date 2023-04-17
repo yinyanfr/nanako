@@ -4,13 +4,14 @@ const fs = require("node:fs");
 const path = require("node:path");
 const ora = require("ora");
 const prompts = require("prompts");
+const { isNanakoRoot } = require("./lib");
 
 // src/cli/command.js
+const rootPath = path.join(__dirname, "..", "..");
 
 const createCommand = async (name, sub, options) => {
   const target = sub?.[0] ?? ".";
   const createPath = path.resolve(target);
-  const rootPath = path.join(__dirname, "..", "..");
 
   const configs = {
     categories: {
@@ -93,7 +94,91 @@ const createCommand = async (name, sub, options) => {
 };
 
 const addCommand = async (name, sub, options) => {
-  console.log({ name, sub, options });
+  const [book, chapter] = sub ?? [];
+  if (!isNanakoRoot()) {
+    throw new Error(
+      "Please run this command at the root folder of your Nanako instance."
+    );
+  }
+  if (!book) {
+    throw new Error("Please specify the name of the book.");
+  }
+
+  const bookPath = path.resolve("docs", book);
+  if (!chapter) {
+    const initials = {
+      title: book,
+      category: "novel",
+      lang: "zh-Hans",
+      index: 1,
+    };
+    const questions = [
+      {
+        type: "text",
+        name: "title",
+        message: "What is the title of your book?",
+        initial: initials.title,
+      },
+      {
+        type: "text",
+        name: "category",
+        message: "What is the category of your book?",
+        initial: initials.category,
+      },
+      {
+        type: "text",
+        name: "lang",
+        message: "Which language (locale) is your book?",
+        initial: initials.lang,
+      },
+      {
+        type: "number",
+        name: "index",
+        message: "What is the index (order) of your book?",
+        initial: initials.index,
+      },
+    ];
+    const meta = options?.yes ? initials : await prompts(questions);
+    fs.mkdirSync(bookPath, { recursive: true });
+    fs.writeFileSync(
+      path.join(bookPath, "meta.json"),
+      JSON.stringify(meta, null, 2)
+    );
+    console.log(`Success: Your book is created at ${bookPath}`);
+  } else {
+    if (!fs.existsSync(bookPath)) {
+      console.warn(
+        `Please create the book first by using:\nnpx nanako add ${book}`
+      );
+      return 1;
+    }
+    const chapterPath = path.join(bookPath, chapter);
+    const initials = {
+      title: chapter,
+      index: 1,
+    };
+    const questions = [
+      {
+        type: "text",
+        name: "title",
+        message: "What is the title of your chapter?",
+        initial: initials.title,
+      },
+      {
+        type: "number",
+        name: "index",
+        message: "What is the index (order) of your chapter?",
+        initial: initials.index,
+      },
+    ];
+    const meta = options?.yes ? initials : await prompts(questions);
+    fs.mkdirSync(chapterPath, { recursive: true });
+    fs.writeFileSync(
+      path.join(chapterPath, "meta.json"),
+      JSON.stringify(meta, null, 2)
+    );
+    console.log(`Success: Your chapter is created at ${chapterPath}`);
+  }
 };
 
 module.exports = {
