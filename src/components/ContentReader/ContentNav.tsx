@@ -46,9 +46,7 @@ const ContentNav: FC<ContentNavProps> = ({ content, chapters }) => {
       key: e.pathName,
       label: (
         <Link href={`/${router.query.book}/${e.pathName}`}>
-          <a>
-            {e.index}. {e.title}
-          </a>
+          {e.index}. {e.title}
         </Link>
       ),
     }));
@@ -76,7 +74,7 @@ const ContentNav: FC<ContentNavProps> = ({ content, chapters }) => {
           key: "zh-Hans",
           label: (
             <Link href={router.asPath} locale="zh-Hans">
-              <a>中文简体</a>
+              中文简体
             </Link>
           ),
         },
@@ -84,7 +82,7 @@ const ContentNav: FC<ContentNavProps> = ({ content, chapters }) => {
           key: "zh-Hant",
           label: (
             <Link href={router.asPath} locale="zh-Hant">
-              <a>中文繁体</a>
+              中文繁体
             </Link>
           ),
         },

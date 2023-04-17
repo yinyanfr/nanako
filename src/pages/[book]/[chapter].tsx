@@ -47,31 +47,34 @@ const Chapter: FC<ChapterProps> = ({ content, book, cookies }) => {
       </Head>
 
       <header className="header">
-        <Breadcrumb>
-          <Breadcrumb.Item key="/">
-            <Link href="/">
-              <a>
-                <HomeOutlined />
-              </a>
-            </Link>
-          </Breadcrumb.Item>
-          {content ? (
-            <>
-              <Breadcrumb.Item key={content?.bookPath}>
-                <Link href={`/${content?.bookPath}`}>
-                  <a>
-                    <BookOutlined /> {content?.bookTitle}
-                  </a>
+        <Breadcrumb
+          items={[
+            {
+              key: "/",
+              title: (
+                <Link href="/">
+                  <HomeOutlined />
                 </Link>
-              </Breadcrumb.Item>
-              <Breadcrumb.Item key={content?.chapterPath}>
+              ),
+            },
+            {
+              key: content?.bookPath,
+              title: (
+                <Link href={`/${content?.bookPath}`}>
+                  <BookOutlined /> {content?.bookTitle}
+                </Link>
+              ),
+            },
+            {
+              key: content?.chapterPath,
+              title: (
                 <a>
                   <FileTextOutlined /> {content?.chapterTitle}
                 </a>
-              </Breadcrumb.Item>
-            </>
-          ) : null}
-        </Breadcrumb>
+              ),
+            },
+          ]}
+        />
 
         <DynamicDarkReader defaultDarken={cookies.theme === "dark"} />
       </header>
